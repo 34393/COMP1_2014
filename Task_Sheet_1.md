@@ -9,3 +9,9 @@
 ##Question 3b Answers
 
 1. UpdateRecentScores(RecentScores, Score)
+
+##Question 5 Answers
+
+1. Datetime
+2. UpdateRecentScores(RecentScores, Score), DisplayRecentScores(RecentScores), ResetRecentScores(RecentScores), PlayGame(Deck, RecentScores)
+3. datetime.datetime.strptime(dateString, dateTimeFormat)
