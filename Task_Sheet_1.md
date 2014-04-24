@@ -15,3 +15,13 @@
 1. Datetime
 2. UpdateRecentScores(RecentScores, Score), DisplayRecentScores(RecentScores), ResetRecentScores(RecentScores), PlayGame(Deck, RecentScores)
 3. datetime.datetime.strptime(dateString, dateTimeFormat)
+
+##Additional Task 1 Answers
+
+1. 
+2. 
+
+##Additional Task 2 Answers
+
+1. 
+2. 
