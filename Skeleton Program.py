@@ -5,6 +5,7 @@
 # version 2 edited 06/03/2014
 
 import random
+import datetime
 
 NO_OF_RECENT_SCORES = 3
 
