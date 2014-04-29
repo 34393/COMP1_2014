@@ -210,6 +210,22 @@ def DisplayRecentScores(RecentScores):
   input()
   print()
 
+def BubbleSortScores(RecentScores):
+  swapped = True
+  while swapped:
+    for count in range(1,NO_OF_RECENT_SCORES):
+      if RecentScores[count].Score < RecentScores[count + 1].Score:
+        temp1 = RecentScores[count].Score
+        RecentScores[count].Score = RecentScores[count + 1].Score
+        RecentScores[count + 1].Score = temp1
+        temp1 = RecentScores[count].Name
+        RecentScores[count].Name = RecentScores[count + 1].Name
+        RecentScores[count + 1].Name = temp1
+        temp1 = RecentScores[count].date
+        RecentScores[count].date = RecentScores[count + 1].date
+        RecentScores[count + 1].date = temp1
+    swapped = False
+
 def UpdateRecentScores(RecentScores, Score):
   addScore = ""
   while addScore == "":
@@ -242,6 +258,7 @@ def UpdateRecentScores(RecentScores, Score):
       print("Invalid choice, please try again.")
       print()
       addScore = ""
+  BubbleSortScores(RecentScores)
 
 def PlayGame(Deck, RecentScores):
   LastCard = TCard()
