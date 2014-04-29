@@ -18,8 +18,20 @@
 
 ##Additional Task 1 Answers
 
-1. 
-2. 
+1. Fixed value - a variable that has a value which doesn't change.
+   Stepper - a variable which can be used to keep count of the number of repetitions.
+   Most Recent Holder - a variable that has a value which is the latest value from a process or an input.
+   Gatherer - 
+   Transformation - a variable that gets its value from a fixed calculation of values.
+   Follower - a variable that copies its value from another variable.
+   Temporary - a variable that holds a value temporarily. 
+2. Fixed Value - NoOfSwaps = 1000 (line 101)
+   Stepper - Count = Count + 1 (line 197)
+   Most Recent Holder - 
+   Gatherer - 
+   Transformation - 
+   Follower - 
+   Temporary - addScore = "" (line 184)
 
 ##Additional Task 2 Answers
 
