@@ -223,7 +223,7 @@ def BubbleSortScores(RecentScores):
     swapped = False
 
 def SaveScores(RecentScores):
-  with open("save_scores.txt",mode="w",encoding="utf-8")as my_file:
+  with open("save_scores.txt",mode="a",encoding="utf-8")as my_file:
     for count in range(1, NO_OF_RECENT_SCORES):
       my_file.write(str(RecentScores[count].Score))
       my_file.write(str(RecentScores[count].Name))
