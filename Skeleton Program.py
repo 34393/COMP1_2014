@@ -75,6 +75,7 @@ def DisplayMenu():
   print('3. Display recent scores')
   print('4. Reset recent scores')
   print("5. Options")
+  print("6. Save scores")
   print()
   print('Select an option from the menu (or enter q to quit): ', end='')
 
@@ -99,6 +100,7 @@ def GetOptionChoice():
 def SetOptions(optionChoice):
   if optionChoice == 1:
     aceHigh = SetAceHighOrLow()
+  
     
 
 def SetAceHighOrLow():
@@ -215,16 +217,20 @@ def BubbleSortScores(RecentScores):
   while swapped:
     for count in range(1,NO_OF_RECENT_SCORES):
       if RecentScores[count].Score < RecentScores[count + 1].Score:
-        temp1 = RecentScores[count].Score
-        RecentScores[count].Score = RecentScores[count + 1].Score
-        RecentScores[count + 1].Score = temp1
-        temp1 = RecentScores[count].Name
-        RecentScores[count].Name = RecentScores[count + 1].Name
-        RecentScores[count + 1].Name = temp1
-        temp1 = RecentScores[count].date
-        RecentScores[count].date = RecentScores[count + 1].date
-        RecentScores[count + 1].date = temp1
+        temp1 = RecentScores[count]
+        RecentScores[count] = RecentScores[count + 1]
+        RecentScores[count + 1] = temp1
     swapped = False
+
+def SaveScores(RecentScores):
+  with open("save_scores.txt",mode="w",encoding="utf-8")as my_file:
+    for count in range(1, NO_OF_RECENT_SCORES):
+      my_file.write(str(RecentScores[count].Score))
+      my_file.write(str(RecentScores[count].Name))
+      my_file.write(str(RecentScores[count].date)+"\n")
+    print()
+    print("Saved Game")
+    print()
 
 def UpdateRecentScores(RecentScores, Score):
   addScore = ""
@@ -312,3 +318,9 @@ if __name__ == '__main__':
       DisplayRecentScores(RecentScores)
     elif Choice == '4':
       ResetRecentScores(RecentScores)
+    elif Choice == "5":
+      DisplayOptions()
+      optionChoice = GetOptionChoice()
+      SetOPtions(optionChoice)
+    elif Choice == "6":
+      SaveScores(RecentScores)
