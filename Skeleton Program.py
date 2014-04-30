@@ -232,6 +232,11 @@ def SaveScores(RecentScores):
     print("Saved Game")
     print()
 
+def LoadScores():
+  with open("save_scores.txt",mode="r",encoding="utf-8")as my_file:
+    for line in my_file:
+      
+
 def UpdateRecentScores(RecentScores, Score):
   addScore = ""
   while addScore == "":
