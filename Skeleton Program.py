@@ -224,15 +224,20 @@ def BubbleSortScores(RecentScores):
 
 def SaveScores(RecentScores):
   with open("save_scores.txt",mode="a",encoding="utf-8")as my_file:
-    for count in range(1, NO_OF_RECENT_SCORES):
-      my_file.write(str(RecentScores[count].Score))
-      my_file.write(str(RecentScores[count].Name))
-      my_file.write(str(RecentScores[count].date)+"\n")
+    for count in range(1, NO_OF_RECENT_SCORES + 1):
+      if RecentScores[count].date != None:
+        my_file.write(str(RecentScores[count].date)+"\n")
+        my_file.write(str(RecentScores[count].Name)+"\n")
+        my_file.write(str(RecentScores[count].Score)+"\n")
+      else:
+        print()
+        print("Score {0} was not saved due to no score being there.".format(count))
+        print()
     print()
     print("Saved Game")
     print()
 
-def LoadScores():
+def LoadScores(RecentScores):
   with open("save_scores.txt",mode="r",encoding="utf-8")as my_file:
     for line in my_file:
       
@@ -309,6 +314,7 @@ if __name__ == '__main__':
   for Count in range(1, NO_OF_RECENT_SCORES + 1):
     RecentScores.append(TRecentScore())
   Choice = ''
+  RecentScores = LoadScores(RecentScores)
   while Choice not in ['q',"quit"]:
     DisplayMenu()
     Choice = GetMenuChoice()
