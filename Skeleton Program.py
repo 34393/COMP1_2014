@@ -24,9 +24,9 @@ Deck = [None]
 RecentScores = [None]
 Choice = ''
 
-def GetRank(RankNo):
+def GetRank(RankNo, aceHigh):
   Rank = ''
-  if RankNo == 1:
+  if RankNo == 1 and aceHigh == False:
     Rank = 'Ace'
   elif RankNo == 2:
     Rank = 'Two'
@@ -52,6 +52,8 @@ def GetRank(RankNo):
     Rank = 'Queen'
   elif RankNo == 13:
     Rank = 'King'
+  elif RankNo == 1 and aceHigh == True:
+    Rank = "Ace"
   return Rank
 
 def GetSuit(SuitNo):
@@ -93,19 +95,21 @@ def DisplayOptions():
   print()
 
 def GetOptionChoice():
-  optionChoice = int(input("Please select and option: "))
+  optionChoice = int(input("Please select an option:"))
   print()
   return optionChoice
 
 def SetOptions(optionChoice):
+  global aceHigh
   if optionChoice == 1:
-    aceHigh = SetAceHighOrLow()
-  
-    
+    SetAceHighOrLow()
+  elif optionChoice == 2:
+    print("Option 2")
 
 def SetAceHighOrLow():
+  global aceHigh
   aceChoice = ""
-  while aceChoice != "h" or aceChoice != "l":
+  while aceChoice != "h" and aceChoice != "l":
     aceChoice = input("Do you want ace to be (h)igh or (l)ow? ")
     if aceChoice == "h":
       aceHigh = True
@@ -113,7 +117,6 @@ def SetAceHighOrLow():
       aceHigh = False
     else:
       print("Please enter either h or l")
-  return aceHigh
 
 def LoadDeck(Deck):
   CurrentFile = open('deck.txt', 'r')
@@ -143,7 +146,7 @@ def ShuffleDeck(Deck):
 
 def DisplayCard(ThisCard):
   print()
-  print('Card is the', GetRank(ThisCard.Rank), 'of', GetSuit(ThisCard.Suit))
+  print('Card is the', GetRank(ThisCard.Rank, aceHigh), 'of', GetSuit(ThisCard.Suit))
   print()
 
 def GetCard(ThisCard, Deck, NoOfCardsTurnedOver):
@@ -237,9 +240,9 @@ def SaveScores(RecentScores):
     print("Saved Game")
     print()
 
-def LoadScores(RecentScores):
-  with open("save_scores.txt",mode="r",encoding="utf-8")as my_file:
-    for line in my_file:
+#def LoadScores(RecentScores):
+  #with open("save_scores.txt",mode="r",encoding="utf-8")as my_file:
+    #for line in my_file:
       
 
 def UpdateRecentScores(RecentScores, Score):
@@ -309,12 +312,13 @@ def PlayGame(Deck, RecentScores):
     UpdateRecentScores(RecentScores, 51)
 
 if __name__ == '__main__':
+  global aceHigh
   for Count in range(1, 53):
     Deck.append(TCard())
   for Count in range(1, NO_OF_RECENT_SCORES + 1):
     RecentScores.append(TRecentScore())
   Choice = ''
-  RecentScores = LoadScores(RecentScores)
+  #RecentScores = LoadScores(RecentScores)
   while Choice not in ['q',"quit"]:
     DisplayMenu()
     Choice = GetMenuChoice()
@@ -332,6 +336,6 @@ if __name__ == '__main__':
     elif Choice == "5":
       DisplayOptions()
       optionChoice = GetOptionChoice()
-      SetOPtions(optionChoice)
+      SetOptions(optionChoice)
     elif Choice == "6":
       SaveScores(RecentScores)
