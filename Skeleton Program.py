@@ -26,8 +26,11 @@ Choice = ''
 
 def GetRank(RankNo, aceHigh):
   Rank = ''
-  if RankNo == 1 and aceHigh == False:
+  if RankNo == 1 and aceHigh == "l":
     Rank = 'Ace'
+  elif RankNo == 1 and aceHigh == "h":
+    RankNo == 14
+    Rank = "Ace"
   elif RankNo == 2:
     Rank = 'Two'
   elif RankNo == 3:
@@ -52,8 +55,6 @@ def GetRank(RankNo, aceHigh):
     Rank = 'Queen'
   elif RankNo == 13:
     Rank = 'King'
-  elif RankNo == 1 and aceHigh == True:
-    Rank = "Ace"
   return Rank
 
 def GetSuit(SuitNo):
@@ -100,14 +101,12 @@ def GetOptionChoice():
   return optionChoice
 
 def SetOptions(optionChoice):
-  global aceHigh
   if optionChoice == 1:
-    SetAceHighOrLow()
+    aceHigh = SetAceHighOrLow()
   elif optionChoice == 2:
     print("Option 2")
 
 def SetAceHighOrLow():
-  global aceHigh
   aceChoice = ""
   while aceChoice != "h" and aceChoice != "l":
     aceChoice = input("Do you want ace to be (h)igh or (l)ow? ")
@@ -117,6 +116,7 @@ def SetAceHighOrLow():
       aceHigh = False
     else:
       print("Please enter either h or l")
+  return aceHigh
 
 def LoadDeck(Deck):
   CurrentFile = open('deck.txt', 'r')
@@ -312,7 +312,7 @@ def PlayGame(Deck, RecentScores):
     UpdateRecentScores(RecentScores, 51)
 
 if __name__ == '__main__':
-  global aceHigh
+  aceHigh = ""
   for Count in range(1, 53):
     Deck.append(TCard())
   for Count in range(1, NO_OF_RECENT_SCORES + 1):
