@@ -8,6 +8,7 @@ import random
 from datetime import date
 
 NO_OF_RECENT_SCORES = 3
+aceHigh = False
 
 class TCard():
   def __init__(self):
@@ -24,13 +25,10 @@ Deck = [None]
 RecentScores = [None]
 Choice = ''
 
-def GetRank(RankNo, aceHigh):
+def GetRank(RankNo):
   Rank = ''
-  if RankNo == 1 and aceHigh == "l":
+  if RankNo == 1:
     Rank = 'Ace'
-  elif RankNo == 1 and aceHigh == "h":
-    RankNo == 14
-    Rank = "Ace"
   elif RankNo == 2:
     Rank = 'Two'
   elif RankNo == 3:
@@ -96,27 +94,34 @@ def DisplayOptions():
   print()
 
 def GetOptionChoice():
-  optionChoice = int(input("Please select an option:"))
+  valid = False
+  while not valid:
+    optionChoice = input("Select an option from the menu (or enter q to quit): ")
+    if optionChoice in ["1","q"]:
+      valid = True
+    else:
+      print("Please enter a valid option.")
   print()
-  return optionChoice
+  return optionChoice.lower()[0]
 
 def SetOptions(optionChoice):
-  if optionChoice == 1:
-    aceHigh = SetAceHighOrLow()
-  elif optionChoice == 2:
-    print("Option 2")
+  if optionChoice == "1":
+    SetAceHighOrLow()
 
 def SetAceHighOrLow():
-  aceChoice = ""
-  while aceChoice != "h" and aceChoice != "l":
-    aceChoice = input("Do you want ace to be (h)igh or (l)ow? ")
-    if aceChoice == "h":
-      aceHigh = True
-    elif aceChoice == "l":
-      aceHigh = False
+  global aceHigh
+  valid = False
+  while not valid:
+    aceValue = input("Do you want the Ace to be (h)igh or (l)ow: ")
+    aceValue = aceValue.lower()[0]
+    if aceValue in ["h","l"]:
+      valid = True
     else:
-      print("Please enter either h or l")
-  return aceHigh
+      print("Please enter a valid choice.")
+    if aceValue == "h":
+      aceHigh = True
+    else:
+      aceHigh = False
 
 def LoadDeck(Deck):
   CurrentFile = open('deck.txt', 'r')
@@ -146,7 +151,7 @@ def ShuffleDeck(Deck):
 
 def DisplayCard(ThisCard):
   print()
-  print('Card is the', GetRank(ThisCard.Rank, aceHigh), 'of', GetSuit(ThisCard.Suit))
+  print('Card is the', GetRank(ThisCard.Rank), 'of', GetSuit(ThisCard.Suit))
   print()
 
 def GetCard(ThisCard, Deck, NoOfCardsTurnedOver):
@@ -159,6 +164,14 @@ def GetCard(ThisCard, Deck, NoOfCardsTurnedOver):
   Deck[52 - NoOfCardsTurnedOver].Rank = 0
 
 def IsNextCardHigher(LastCard, NextCard):
+  if aceHigh and NextCard.Rank == 1:
+    NextCard.Rank = 14
+  if aceHigh and LastCard.Rank == 1:
+    LastCard.Rank = 14
+  if not aceHigh and NextCard.Rank == 14:
+    NextCard.Rank = 1
+  if not aceHigh and LastCard.Rank == 14:
+    LastCard.Rank = 1
   Higher = False
   if NextCard.Rank > LastCard.Rank:
     Higher = True
@@ -166,10 +179,13 @@ def IsNextCardHigher(LastCard, NextCard):
 
 def GetPlayerName():
   print()
-  PlayerName = ""
-  PlayerName = input('Please enter your name: ')
-  while PlayerName == "":
-    PlayerName = input('You must enter something for your name! Try again: ')
+  valid = False
+  while not valid:
+    PlayerName = input("Please enter your name: ")
+    if len(PlayerName) > 0:
+      valid = True
+    else:
+      print("You must enter something for your name!")
   print()
   return PlayerName
 
@@ -348,6 +364,7 @@ if __name__ == '__main__':
     elif Choice == "5":
       DisplayOptions()
       optionChoice = GetOptionChoice()
-      SetOptions(optionChoice)
+      if optionChoice != "q":
+        SetOptions(optionChoice)
     elif Choice == "6":
       SaveScores(RecentScores)
