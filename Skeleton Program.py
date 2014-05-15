@@ -7,7 +7,7 @@
 import random
 from datetime import date
 
-NO_OF_RECENT_SCORES = 3
+NO_OF_RECENT_SCORES = 10
 aceHigh = False
 
 class TCard():
@@ -306,7 +306,6 @@ def UpdateRecentScores(RecentScores, Score):
       print("Invalid choice, please try again.")
       print()
       addScore = ""
-  BubbleSortScores(RecentScores)
 
 def PlayGame(Deck, RecentScores):
   LastCard = TCard()
@@ -344,8 +343,10 @@ if __name__ == '__main__':
   for Count in range(1, 53):
     Deck.append(TCard())
   RecentScores = LoadScores(RecentScores)
-  for Count in range(1, NO_OF_RECENT_SCORES + 1):
-    RecentScores.append(TRecentScore())
+  if len(RecentScores) == 0 or len(RecentScores) < NO_OF_RECENT_SCORES:
+    additionalScores = NO_OF_RECENT_SCORES - len(RecentScores) + 1
+    for Count in range(1, additionalScores + 1):
+      RecentScores.append(TRecentScore())
   Choice = ''
   while Choice not in ['q',"quit"]:
     DisplayMenu()
@@ -358,6 +359,7 @@ if __name__ == '__main__':
       LoadDeck(Deck)
       PlayGame(Deck, RecentScores)
     elif Choice == '3':
+      BubbleSortScores(RecentScores)
       DisplayRecentScores(RecentScores)
     elif Choice == '4':
       ResetRecentScores(RecentScores)
