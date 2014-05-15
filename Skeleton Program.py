@@ -9,6 +9,8 @@ from datetime import date
 
 NO_OF_RECENT_SCORES = 10
 aceHigh = False
+sameCardEndGame = False
+GameOver = False
 
 class TCard():
   def __init__(self):
@@ -91,29 +93,32 @@ def DisplayOptions():
   print("OPTIONS MENU")
   print()
   print("1. Set ace as high or low")
+  print("2. Card of same score ends game")
   print()
 
 def GetOptionChoice():
   valid = False
   while not valid:
     optionChoice = input("Select an option from the menu (or enter q to quit): ")
-    if optionChoice in ["1","q"]:
+    if optionChoice in ["1","2","q"]:
       valid = True
     else:
       print("Please enter a valid option.")
   print()
-  return optionChoice.lower()[0]
+  return optionChoice.lower()
 
 def SetOptions(optionChoice):
   if optionChoice == "1":
     SetAceHighOrLow()
+  elif optionChoice == "2":
+    SetSameScore()
 
 def SetAceHighOrLow():
   global aceHigh
   valid = False
   while not valid:
     aceValue = input("Do you want the Ace to be (h)igh or (l)ow: ")
-    aceValue = aceValue.lower()[0]
+    aceValue = aceValue.lower()
     if aceValue in ["h","l"]:
       valid = True
     else:
@@ -122,6 +127,21 @@ def SetAceHighOrLow():
       aceHigh = True
     else:
       aceHigh = False
+
+def SetSameScore():
+  global sameCardEndGame
+  valid = False
+  while not valid:
+    sameCard = input("Do you want cards with the same value as the previous card to end the game? (y or n)")
+    sameCard = sameCard.lower()
+    if sameCard in ["y","n"]:
+      valid = True
+    else:
+      print("Please enter a valid choice.")
+    if sameCard == "y":
+      sameCardEndGame = True
+    else:
+      sameCardEndGame = False
 
 def LoadDeck(Deck):
   CurrentFile = open('deck.txt', 'r')
@@ -164,6 +184,9 @@ def GetCard(ThisCard, Deck, NoOfCardsTurnedOver):
   Deck[52 - NoOfCardsTurnedOver].Rank = 0
 
 def IsNextCardHigher(LastCard, NextCard):
+  global aceHigh
+  global sameCardEndGame
+  global GameOver
   if aceHigh and NextCard.Rank == 1:
     NextCard.Rank = 14
   if aceHigh and LastCard.Rank == 1:
@@ -175,6 +198,10 @@ def IsNextCardHigher(LastCard, NextCard):
   Higher = False
   if NextCard.Rank > LastCard.Rank:
     Higher = True
+  elif sameCardEndGame and NextCard.Rank == LastCard.Rank:
+    GameOver = True
+  elif not sameCardEndGame:
+    GameOver = False
   return Higher
 
 def GetPlayerName():
@@ -308,9 +335,9 @@ def UpdateRecentScores(RecentScores, Score):
       addScore = ""
 
 def PlayGame(Deck, RecentScores):
+  global GameOver
   LastCard = TCard()
   NextCard = TCard()
-  GameOver = False
   GetCard(LastCard, Deck, 0)
   DisplayCard(LastCard)
   NoOfCardsTurnedOver = 1
@@ -326,12 +353,13 @@ def PlayGame(Deck, RecentScores):
     DisplayCard(NextCard)
     NoOfCardsTurnedOver = NoOfCardsTurnedOver + 1
     Higher = IsNextCardHigher(LastCard, NextCard)
-    if (Higher and Choice == 'y') or (not Higher and Choice == 'n'):
-      DisplayCorrectGuessMessage(NoOfCardsTurnedOver - 1)
-      LastCard.Rank = NextCard.Rank
-      LastCard.Suit = NextCard.Suit
-    else:
-      GameOver = True
+    if not GameOver:
+      if (Higher and Choice == 'y') or (not Higher and Choice == 'n'):
+        DisplayCorrectGuessMessage(NoOfCardsTurnedOver - 1)
+        LastCard.Rank = NextCard.Rank
+        LastCard.Suit = NextCard.Suit
+      else:
+        GameOver = True
   if GameOver:
     DisplayEndOfGameMessage(NoOfCardsTurnedOver - 2)
     UpdateRecentScores(RecentScores, NoOfCardsTurnedOver - 2)
