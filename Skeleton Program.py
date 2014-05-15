@@ -227,20 +227,36 @@ def BubbleSortScores(RecentScores):
 
 def SaveScores(RecentScores):
   with open("save_scores.txt",mode="w",encoding="utf-8")as my_file:
-    for count in range(1, NO_OF_RECENT_SCORES + 1):
-      if RecentScores[count].date != None:
-        my_file.write("{0} {1} {2}".format(RecentScores[count].date,RecentScores[count].Name,RecentScores[count].Score)+"\n")
-      else:
-        print()
-        print("Score {0} was not saved due to no score existing".format(count))
-        print()
-    print()
-    print("Saved Game")
-    print()
+    for Score in RecentScores:
+      if Score != None:
+        if Score.Name != "":
+          my_file.write(Score.date.strftime("%d/%m/%Y")+",")
+          my_file.write(Score.Name+",")
+          my_file.write(str(Score.Score)+"\n")
 
 def LoadScores(RecentScores):
-  with open("save_scores.txt",mode="r",encoding="utf-8")as my_file:
-    
+  try:
+    with open("save_scores.txt",mode="r",encoding="utf-8")as my_file:
+      scores = my_file.read().splitlines()
+      for score in range(len(scores)):
+        temp = scores[score].split(",")
+        scores[score] = temp
+        scoreDate = scores[score][0]
+        day = scoreDate[0:2]
+        month = scoreDate[3:5]
+        year = scoreDate[6:]
+        scoreDate = date(int(year),int(month),int(day))
+        scores[score][0] = scoreDate
+      RecentScores = [None]
+      for score in scores:
+        newScore = TRecentScore()
+        newScore.date = score[0]
+        newScore.Name = score[1]
+        newScore.Score = int(score[2])
+        RecentScores.append(newScore)
+  except FileNotFoundError:
+      RecentScores = [None]
+  return RecentScores
 
 def UpdateRecentScores(RecentScores, Score):
   addScore = ""
@@ -309,13 +325,12 @@ def PlayGame(Deck, RecentScores):
     UpdateRecentScores(RecentScores, 51)
 
 if __name__ == '__main__':
-  aceHigh = ""
   for Count in range(1, 53):
     Deck.append(TCard())
+  RecentScores = LoadScores(RecentScores)
   for Count in range(1, NO_OF_RECENT_SCORES + 1):
     RecentScores.append(TRecentScore())
   Choice = ''
-  RecentScores = LoadScores(RecentScores)
   while Choice not in ['q',"quit"]:
     DisplayMenu()
     Choice = GetMenuChoice()
